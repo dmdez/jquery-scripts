@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+    <script src="jquery.slider.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#slider-demo').slider({
+                viewportWidth: 400,
+                marginX: 1
+            });
+        });
+    </script>
+    <style>
+        #slider-demo { width: 550px; height: 300px; overflow: hidden; }
+        .slider, .slider li { margin: 0; padding: 0; list-style-type: none; }
+        .slider li { }
+        .slider li img { width: 400px; }        
+    </style>
+</head>
+<body>
+    <ul id="slider-demo" class="slider">
+        <li><a href="http://www.google.com/1"><img src="https://lh4.googleusercontent.com/-ei9m1LX-ZYg/TYn7Fv4gHmI/AAAAAAAABbM/YBfGIdFGIsI/s640/January08%252520030.jpg" /></a></li>
+        <li><a href="http://www.google.com/2"><img src="https://lh3.googleusercontent.com/-6Dx4cwjo_RY/TYn7LzyeCuI/AAAAAAAABbQ/MR99Pp8hJnY/s800/Picture%252520796.jpg" /></a></li>
+        <li><a href="http://www.google.com/3"><img src="https://lh3.googleusercontent.com/-mUINKkxp0dM/TYn7Y_tiVTI/AAAAAAAABbU/ZaS-kVYAO8c/s800/100_2050.jpg" /></a></li>
+        <li><a href="http://www.google.com/4"><img src="https://lh5.googleusercontent.com/--jK3HNy-iuI/TYn7fUDSRWI/AAAAAAAABbY/zu8J8BOA1RM/s800/2009%252520029.jpg" /></a></li>
+        <li><a href="http://www.google.com/5"><img src="https://lh5.googleusercontent.com/-kduSLLNl49Q/TYn-kP9v8II/AAAAAAAABbc/hExLswwbt-M/lucas-toby.jpg" /></a></li>
+        <li><a href="http://www.google.com/6"><img src="https://lh6.googleusercontent.com/-tFwklP49YvA/TYn-kPx0gVI/AAAAAAAABbg/AkHjpEMN5Zg/s640/lucas-me.jpg" /></a></li>
+    </ul>
+</body>
+</html>
