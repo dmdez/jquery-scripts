@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,21 +6,20 @@
     <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
-    <script src="slider/jquery.slider.js"></script>
+    <script src="jquery.slider.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#slider-demo').slider({
-                viewportWidth: 300,
+                viewportWidth: 400,
                 marginX: 1
             });
         });
     </script>
     <style>
-        #slider-demo { width: 450px; height: 300px; overflow: hidden; }
+        #slider-demo { width: 550px; height: 300px; overflow: hidden; }
         .slider, .slider li { margin: 0; padding: 0; list-style-type: none; }
         .slider li { }
-        .slider li img { width: 400px !important; }
-        pre { border: 2px dotted #ccc; background: #eee; padding: 10px; margin: 0 0 1em; }
+        .slider li img { width: 400px; }        
     </style>
 </head>
 <body>
@@ -32,13 +31,5 @@
         <li><a href="http://www.google.com/5"><img src="https://lh5.googleusercontent.com/-kduSLLNl49Q/TYn-kP9v8II/AAAAAAAABbc/hExLswwbt-M/lucas-toby.jpg" /></a></li>
         <li><a href="http://www.google.com/6"><img src="https://lh6.googleusercontent.com/-tFwklP49YvA/TYn-kPx0gVI/AAAAAAAABbg/AkHjpEMN5Zg/s640/lucas-me.jpg" /></a></li>
     </ul>
-    <pre>
-$(document).ready(function () {
-    $('#slider-demo').slider({
-        viewportWidth: 300,
-        marginX: 1
-    });
-});
-    </pre>
 </body>
 </html>
