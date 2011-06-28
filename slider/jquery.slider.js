@@ -1,10 +1,8 @@
-﻿(function ($) {
+(function ($) {
     $.fn.slider = function (options) {
 
         var settings = {
             'speed': 400,
-            'align': 'left',
-            'marginX': 0,
             'startIndex': 0
         };
 
@@ -14,79 +12,95 @@
 
         return this.each(function (i, el) {
 
-            var 
-            // elements
-                $container = $(this),
-                $wrap = $('<div class="slider-wrap" />'),
-                $lists = $container.find('li'),
-                $images = $lists.find('img'),
-                $first_list_item = $($lists[settings.startIndex]),
+            $(el).bind('slider.sizing', function () {
+                var 
+                // elements
+                    $container = $(this),
+                    $wrap = $('<div class="slider-wrap" />'),
+                    $lists = $container.find('li'),
+                    $images = $lists.find('img'),
+                    $first_list_item = $($lists[settings.startIndex]),
 
-            // internal variables
-                width = $container.width(),
-                height = $container.height(),
-                count = $lists.size(),
-                total_margin_x = settings.marginX * count,
-                closed_width = Math.round((width - settings.viewportWidth - total_margin_x) / (count - 1)),
-                overflow_list_width = 2000,
-                active_index = settings.startIndex;
+                // internal variables
+                    width = $container.width(),
+                    height = $container.height(),
+                    count = $lists.size(),
+                    overflow_list_width = 90000,
+                    active_index = settings.startIndex;
 
-            var listProperties = {
-                'float': 'left',
-                'overflow': 'hidden',
-                'width': closed_width,
-                'marginRight': settings.marginX
-            };
-
-            var action = function () {
-                var current_index = $(this).index();
-
-                $(this)
-                    .stop()
-                    .animate({
-                        'width': settings.viewportWidth
-                    }, settings.speed, 'easeOutQuint');
-
-                $lists.each(function (i) {
-                    if (i != current_index) {
-                        $(this)
-                        .stop()
-                        .animate({
-                            'width': closed_width
-                        }, settings.speed, 'easeOutQuint');
+                // calculate total margin,padding,border widths for sizing
+                var outer_x = 0;
+                var lrgr_outer_y = 0;
+                $lists.each(function () {
+                    outer_x += $(this).outerWidth(true) - $(this).width();
+                    var y_space = $(this).outerHeight(true) - $(this).height();
+                    if (lrgr_outer_y < y_space) {
+                        lrgr_outer_y = y_space;
                     }
                 });
 
-                active_index = current_index;
-            };
+                var closed_width = Math.round((width - settings.viewportWidth - outer_x) / (count - 1));
 
-            // create wrapper
-            $wrap
-                .width(width)
-                .height(height)
-                .css({ 'overflow': 'hidden' });
+                var stripListCss = { margin: '0', padding: '0', 'listStyleType': 'none' };
 
-            // container formatting and add wrapper
-            $container
-                .width(overflow_list_width)
-                .wrap($wrap);
+                var listProperties = stripListCss;
+                listProperties = {
+                    'float': 'left',
+                    'overflow': 'hidden',
+                    'width': closed_width
+                };
 
-            // Image formatting
-            $images
-                .width(settings.viewportWidth)
-                .css({ 'float': settings.align, 'border': 0 });
+                var action = function () {
+                    var current_index = $(this).index();
 
-            // list formatting and event handling
-            $lists
-                .css(listProperties)
-                .height(height)
-                .bind('mouseover', action)
-                .bind('click', action);
+                    $(this)
+                        .stop()
+                        .animate({
+                            'width': settings.viewportWidth
+                        }, settings.speed, 'easeOutQuint');
 
-            $first_list_item
-                .css({
-                    'width': settings.viewportWidth
-                });
+                    $lists.each(function (i) {
+                        if (i != current_index) {
+                            $(this)
+                            .stop()
+                            .animate({
+                                'width': closed_width
+                            }, settings.speed, 'easeOutQuint');
+                        }
+                    });
+
+                    active_index = current_index;
+                };
+
+                // create wrapper
+                $wrap
+                    .width(width)
+                    .height(height)
+                    .css({ 'overflow': 'hidden' });
+
+                // container formatting and add wrapper
+                $container
+                    .width(overflow_list_width)
+                    .wrap($wrap)
+                    .css(stripListCss);
+
+                // Image formatting
+                $images
+                    .width(settings.viewportWidth)
+                    .css({ 'border': 0 });
+
+                // list formatting and event handling
+                $lists
+                    .css(listProperties)
+                    .height(height - lrgr_outer_y)
+                    .bind('mouseover', action)
+                    .bind('click', action);
+
+                $first_list_item
+                    .css({
+                        'width': settings.viewportWidth
+                    });
+            }).trigger('slider.sizing');
         });
     };
 })(jQuery);
