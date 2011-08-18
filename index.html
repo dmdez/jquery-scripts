@@ -3,6 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <link href='http://fonts.googleapis.com/css?family=Bowlby+One+SC' rel='stylesheet' type='text/css'>
+    <link rel="Stylesheet" type="text/css" href="css/1140.css" />
+    <link rel="Stylesheet" type="text/css" href="css/styles.css" />
     <style type="text/css">
         /* Layout */
         table { margin: 0 0 1em; }
@@ -12,9 +15,17 @@
         .slider, .slider li { margin: 0; padding: 0; list-style-type: none; }
         .slider-wrap { margin: 0 0 1em; }
         
+        #fluid-demo { height: 300px; }
+        #fluid-demo .item { height: 300px; }
+        #fluid-demo .item1 { background: #999; }
+        #fluid-demo .item2 { background: #aaa; }
+        #fluid-demo .item3 { background: #bbb; }
+        #fluid-demo .item4 { background: #ccc; }
+        #fluid-demo .item5 { background: #ddd; }
+        #fluid-demo .item6 { background: #eee; }
+        
         /* Demo 1 */
-        #demo1 { width: 450px; height: 300px; overflow: hidden; }
-        #demo1 li { margin: 0 1px 0 0; border: 1px solid red; }
+        #demo1 { height: 300px; overflow: hidden; }
         #demo1 li a { color: #000; font-size: 2em;}        
         #demo1 .item { width: 380px; height: 280px; padding: 10px; background: #ccc; display: block; }
         #demo1 .item1 { background: #999; }
@@ -25,70 +36,104 @@
         #demo1 .item6 { background: #eee; }
         
         /* Demo 2 */
-        #demo2 { width: 850px; height: 420px; overflow: hidden; }
-        #demo2 li { margin: 0 3px 0 0; }
+        #demo2 { height: 320px; overflow: hidden; }
         #demo2 li a { color: #000; font-size: 2em;}        
-        #demo2 li img { width: 540px; }
+        #demo2 li img { width: 740px; max-width: 740px; }
         
         
     </style>
 </head>
 <body>
     
-    <h1>jQuery Sliding Slideshow Demo</h1>
+    <div class="container">
+        <div class="row">
+            <div class="fourcol left-col">
+                <h1>Window Blinds</h1>
     
-    <p>The jQuery sliding slideshow plugin creates a horizontal sliding effect, much like</p>
-    
-    <table border="1">
-      <caption>Configuration</caption>
-      <tr>
-          <th>Key</th>
-          <th>Type</th>
-          <th>Description</th>  
-      </tr>
-      <tr>
-          <td>viewportWidth</td>
-          <td><em>Integer</em></td>
-          <td>Width of slideshow viewport when selected item is active</td>
-      </tr>
-    </table>
-    
-    <h2>Demo 1</h2>    
-    <ul id="demo1" class="slider">
-        <li><a href="#"><span class="item item1">Item 1</span></a></li>
-        <li><a href="#"><span class="item item2">Item 2</span></a></li>
-        <li><a href="#"><span class="item item3">Item 3</span></a></li>
-        <li><a href="#"><span class="item item4">Item 4</span></a></li>
-        <li><a href="#"><span class="item item5">Item 5</span></a></li>
-        <li><a href="#"><span class="item item6">Item 6</span></a></li>
-    </ul>
-    <pre id="demo1-code" class="code">
-$(document).ready(function () {
-    $('#demo1').slider({
-        viewportWidth: 300,
-        startIndex: 3
-    });
-});
-    </pre>
+                <p>Fluid horizontal slideshow blind effect using jQuery</p>
+                
+                <h2>Options</h2>
+                <dl>
+                    <dt>speed</dt>
+                    <dd>
+                        Int (400)
+                    </dd>
 
-    <ul id="demo2" class="slider">
-        <li><a href="#"><img src="slider/images/Chrysanthemum.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Desert.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Hydrangeas.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Jellyfish.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Koala.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Lighthouse.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Penguins.jpg" alt="" /></a></li>
-        <li><a href="#"><img src="slider/images/Tulips.jpg" alt="" /></a></li>
-    </ul>
-    <pre id="demo1-code" class="code">
-$(document).ready(function () {
-    $('#demo2').slider({
-        viewportWidth: 540
-    });
-});
-    </pre>
+                    <dt>startIndex</dt>
+                    <dd>
+                        Int (0)
+                    </dd>
 
+                    <dt>viewportWidth</dt>
+                    <dd>
+                        Percentage (70%)
+                    </dd>
+                </dl>
+            </div>
+            <div class="eightcol last">    
+
+                <ul id="demo2" class="slider">
+                    <li><a href="#"><img src="slider/images/Chrysanthemum.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Desert.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Hydrangeas.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Jellyfish.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Koala.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Lighthouse.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Penguins.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="slider/images/Tulips.jpg" alt="" /></a></li>
+                </ul>
+                <pre id="Pre1" class="code">
+            $(document).ready(function () {
+                $('#demo2').slider({
+                    viewportWidth: 70
+                });
+            });
+                </pre>
+
+                <div class="row">
+                    <div class="fivecol">
+                        <h2>Fluid Demo</h2>    
+                        <ul id="fluid-demo" class="slider">
+                            <li class="item item1"><a href="#"><span>Item 1</span></a></li>
+                            <li class="item item2"><a href="#"><span>Item 2</span></a></li>
+                            <li class="item item3"><a href="#"><span>Item 3</span></a></li>
+                            <li class="item item4"><a href="#"><span>Item 4</span></a></li>
+                            <li class="item item5"><a href="#"><span>Item 5</span></a></li>
+                            <li class="item item6"><a href="#"><span>Item 6</span></a></li>
+                        </ul>
+                        <pre id="fluid-demo-code" class="code">
+                    $(document).ready(function () {
+                        $('#fluid-demo').slider({
+                            viewportWidth: "60%"
+                        });
+                    });
+                        </pre>
+                    </div>
+                    <div class="sevencol last">
+                        <h2>Demo 1</h2>    
+                        <ul id="demo1" class="slider">
+                            <li><a href="#"><span class="item item1">Item 1</span></a></li>
+                            <li><a href="#"><span class="item item2">Item 2</span></a></li>
+                            <li><a href="#"><span class="item item3">Item 3</span></a></li>
+                            <li><a href="#"><span class="item item4">Item 4</span></a></li>
+                            <li><a href="#"><span class="item item5">Item 5</span></a></li>
+                            <li><a href="#"><span class="item item6">Item 6</span></a></li>
+                        </ul>
+                        <pre id="demo1-code" class="code">
+                    $(document).ready(function () {
+                        $('#demo1').slider({
+                            viewportWidth: 60,
+                            startIndex: 3
+                        });
+                    });
+                        </pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 
     <script src="lib/jquery-1.5.1.min.js"></script>
     <script src="lib/jquery.easing.1.3.js"></script>

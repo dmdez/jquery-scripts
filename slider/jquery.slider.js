@@ -1,9 +1,11 @@
 (function ($) {
+
     $.fn.slider = function (options) {
 
         var settings = {
             'speed': 400,
-            'startIndex': 0
+            'startIndex': 0,
+            viewportWidth: '70%'
         };
 
         // if user defined options exists, extend settings
@@ -39,7 +41,11 @@
                     }
                 });
 
+                if (settings.viewportWidth.toString().indexOf("%") == -1)
+                    settings.viewportWidth += "%";
+
                 var closed_width = Math.round((width - settings.viewportWidth - outer_x) / (count - 1));
+                closed_width = Math.floor((100 - settings.viewportWidth.replace('%', '')) / (count - 1));
 
                 var stripListCss = { margin: '0', padding: '0', 'listStyleType': 'none' };
 
@@ -47,47 +53,56 @@
                 listProperties = {
                     'float': 'left',
                     'overflow': 'hidden',
-                    'width': closed_width
+                    'width': closed_width + '%'
                 };
 
                 var action = function () {
                     var current_index = $(this).index();
-
-                    $(this)
-                        .stop()
-                        .animate({
-                            'width': settings.viewportWidth
-                        }, settings.speed, 'easeOutQuint');
+                    var current_item = $(this);
 
                     $lists.each(function (i) {
                         if (i != current_index) {
-                            $(this)
-                            .stop()
-                            .animate({
-                                'width': closed_width
-                            }, settings.speed, 'easeOutQuint');
+                            $(this).stop().animate({ 'width': closed_width + '%' }, {
+                                duration: settings.speed,
+                            }, 'easeOutQuint');
                         }
                     });
+                    current_item.stop().animate({ 'width': settings.viewportWidth }, {
+                        duration: settings.speed
+                    }, 'easeOutQuint');
+
+                    //$lists.each(function (i) {
+                    //    if (i != current_index)
+                    //        $(this).stop().animate({ 'width': closed_width + '%' }, {
+                    //            duration: settings.speed,
+                    //        }, 'easeOutQuint');
+                    //});
+                    //current_item.stop().animate({ 'width': settings.viewportWidth }, {
+                    //    duration: settings.speed,
+                    //    step: function(now, fx) {
+                    //        $lists.each(function (i) {
+                    //            if (i != current_index)
+                    //                $(this).css({ 'width': now + '%' });
+                    //        });
+                    //    }
+                    //}, 'easeOutQuint');
 
                     active_index = current_index;
                 };
 
                 // create wrapper
                 $wrap
-                    .width(width)
                     .height(height)
                     .css({ 'overflow': 'hidden' });
 
                 // container formatting and add wrapper
                 $container
-                    .width(overflow_list_width)
+                //.width(overflow_list_width)
                     .wrap($wrap)
                     .css(stripListCss);
 
                 // Image formatting
-                $images
-                    .width(settings.viewportWidth)
-                    .css({ 'border': 0 });
+                $images.css({ 'border': 0 });
 
                 // list formatting and event handling
                 $lists
