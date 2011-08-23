@@ -29,7 +29,7 @@
                     count = $lists.size(),
                     overflow_list_width = 90000,
                     active_index = settings.startIndex,
-                    actionEvent = ('ontouchstart' in window) ? "click" : "mouseover";
+                    actionEvent = "click";//('ontouchstart' in window) ? "click" : "mouseover";
 
                 if (settings.viewportWidth.toString().indexOf("%") == -1)
                     settings.viewportWidth += "%";
@@ -49,6 +49,9 @@
                 var action = function () {
                     var current_index = $(this).index();
                     var current_item = $(this);
+                    
+                    if (current_index == active_index)
+                      return;
 
                     $lists.each(function (i) {
                         if (i != current_index) {
