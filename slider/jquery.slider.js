@@ -25,27 +25,17 @@
 
                 // internal variables
                     width = $container.width(),
-                    height = $container.height(),
+                    //height = $container.height(),
                     count = $lists.size(),
                     overflow_list_width = 90000,
-                    active_index = settings.startIndex;
-
-                // calculate total margin,padding,border widths for sizing
-                var outer_x = 0;
-                var lrgr_outer_y = 0;
-                $lists.each(function () {
-                    outer_x += $(this).outerWidth(true) - $(this).width();
-                    var y_space = $(this).outerHeight(true) - $(this).height();
-                    if (lrgr_outer_y < y_space) {
-                        lrgr_outer_y = y_space;
-                    }
-                });
+                    active_index = settings.startIndex,
+                    actionEvent = ('ontouchstart' in window) ? "click" : "mouseover";
 
                 if (settings.viewportWidth.toString().indexOf("%") == -1)
                     settings.viewportWidth += "%";
 
-                var closed_width = Math.round((width - settings.viewportWidth - outer_x) / (count - 1));
-                closed_width = Math.floor((100 - settings.viewportWidth.replace('%', '')) / (count - 1));
+                var closed_width = Math.round((width - settings.viewportWidth) / (count - 1));
+                closed_width = (100 - settings.viewportWidth.replace('%', '')) / (count - 1);
 
                 var stripListCss = { margin: '0', padding: '0', 'listStyleType': 'none' };
 
@@ -71,35 +61,31 @@
                         duration: settings.speed
                     }, 'easeOutQuint');
 
-                    //$lists.each(function (i) {
-                    //    if (i != current_index)
-                    //        $(this).stop().animate({ 'width': closed_width + '%' }, {
-                    //            duration: settings.speed,
-                    //        }, 'easeOutQuint');
-                    //});
-                    //current_item.stop().animate({ 'width': settings.viewportWidth }, {
-                    //    duration: settings.speed,
-                    //    step: function(now, fx) {
-                    //        $lists.each(function (i) {
-                    //            if (i != current_index)
-                    //                $(this).css({ 'width': now + '%' });
-                    //        });
-                    //    }
-                    //}, 'easeOutQuint');
-
                     active_index = current_index;
+                    
+                    return false;
                 };
 
                 // create wrapper
                 $wrap
-                    .height(height)
                     .css({ 'overflow': 'hidden' });
 
                 // container formatting and add wrapper
                 $container
-                //.width(overflow_list_width)
                     .wrap($wrap)
                     .css(stripListCss);
+
+                function checkAnimation() {
+                  setInterval(function() {
+                  	if( $lists.is(":animated") ) {
+                      $container.stop().animate({width: '104%'}, 400);
+                  	} else {
+                      $container.stop().animate({width: '100%'}, 400);
+                    }
+                  }, 200);
+                }
+                checkAnimation();
+
 
                 // Image formatting
                 $images.css({ 'border': 0 });
@@ -107,9 +93,7 @@
                 // list formatting and event handling
                 $lists
                     .css(listProperties)
-                    .height(height - lrgr_outer_y)
-                    .bind('mouseover', action)
-                    .bind('click', action);
+                    .bind(actionEvent, action);
 
                 $first_list_item
                     .css({
