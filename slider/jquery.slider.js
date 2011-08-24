@@ -29,7 +29,7 @@
                     count = $lists.size(),
                     overflow_list_width = 90000,
                     active_index = settings.startIndex,
-                    actionEvent = "click";//('ontouchstart' in window) ? "click" : "mouseover";
+                    actionEvent = ('ontouchstart' in window) ? "click" : "mouseover";
 
                 if (settings.viewportWidth.toString().indexOf("%") == -1)
                     settings.viewportWidth += "%";
