@@ -5,7 +5,8 @@
         var settings = {
             'speed': 400,
             'startIndex': 0,
-            viewportWidth: '70%'
+            'viewportWidth': '70%',
+            'onWindowResize': function() {}
         };
 
         // if user defined options exists, extend settings
@@ -13,7 +14,7 @@
             $.extend(settings, options);
 
         return this.each(function (i, el) {
-
+            
             $(el).bind('slider.sizing', function () {
                 var 
                 // elements
@@ -56,7 +57,7 @@
                     $lists.each(function (i) {
                         if (i != current_index) {
                             $(this).stop().animate({ 'width': closed_width + '%' }, {
-                                duration: settings.speed,
+                                duration: settings.speed
                             }, 'easeOutQuint');
                         }
                     });
@@ -74,9 +75,11 @@
                     .css({ 'overflow': 'hidden' });
 
                 // container formatting and add wrapper
+                var containerCss = stripListCss;
+                containerCss.overflow = "hidden";
                 $container
                     .wrap($wrap)
-                    .css(stripListCss);
+                    .css(containerCss);
 
                 function checkAnimation() {
                   setInterval(function() {
@@ -103,6 +106,10 @@
                         'width': settings.viewportWidth
                     });
             }).trigger('slider.sizing');
+
+            $(window).bind('resize', function() {
+                var newWidth = settings.onWindowResize($(this).width());
+            });            
         });
     };
 })(jQuery);

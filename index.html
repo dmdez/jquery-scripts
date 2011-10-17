@@ -17,23 +17,25 @@
     
                 <p>Fluid horizontal slideshow blind effect using jQuery</p>
                 
-                <h2>Options</h2>
-                <dl>
-                    <dt>speed</dt>
-                    <dd>
-                        Int (400)
-                    </dd>
+				<div class="options">
+					<h2>Options</h2>
+					<dl>
+						<dt>speed</dt>
+						<dd>
+							Int (400)
+						</dd>
 
-                    <dt>startIndex</dt>
-                    <dd>
-                        Int (0)
-                    </dd>
+						<dt>startIndex</dt>
+						<dd>
+							Int (0)
+						</dd>
 
-                    <dt>viewportWidth</dt>
-                    <dd>
-                        Percentage (70%)
-                    </dd>
-                </dl>
+						<dt>viewportWidth</dt>
+						<dd>
+							Percentage (70%)
+						</dd>
+					</dl>
+				</div>
             </div>
             <div class="eightcol last">    
 
@@ -50,7 +52,14 @@
                 <pre id="Pre1" class="code">
             $(document).ready(function () {
                 $('#demo2').slider({
-                    viewportWidth: 50
+                    viewportWidth: 50,
+                    onWindowResize: function(width) {
+                        if ( width < 400 ) {
+                            return 70;
+                        } else if ( width < 800 ) {
+                            return 90;
+                        }
+                    }
                 });
             });
                 </pre>
@@ -105,9 +114,10 @@
     <script src="slider/jquery.slider.js"></script>
     <script type="text/javascript">
         $('.code').each(function () {
-            var code = $(this).html();
+            var code = $(this).text();
             eval(code);
         });
+
     </script>
 
 </body>
