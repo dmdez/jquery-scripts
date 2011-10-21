@@ -6,7 +6,7 @@
             'speed': 400,
             'startIndex': 0,
             'viewportWidth': '70%',
-            'onWindowResize': function() {}
+            'onWindowResize': function () { }
         };
 
         // if user defined options exists, extend settings
@@ -14,7 +14,7 @@
             $.extend(settings, options);
 
         return this.each(function (i, el) {
-            
+
             $(el).bind('slider.sizing', function () {
                 var 
                 // elements
@@ -26,7 +26,7 @@
 
                 // internal variables
                     width = $container.width(),
-                    //height = $container.height(),
+                //height = $container.height(),
                     count = $lists.size(),
                     overflow_list_width = 90000,
                     active_index = settings.startIndex,
@@ -35,8 +35,14 @@
                 if (settings.viewportWidth.toString().indexOf("%") == -1)
                     settings.viewportWidth += "%";
 
-                var closed_width = Math.round((width - settings.viewportWidth) / (count - 1));
-                closed_width = (100 - settings.viewportWidth.replace('%', '')) / (count - 1);
+                var viewportWidthNum = settings.viewportWidth.replace('%', '');
+                var adjustedViewportWidthNum = viewportWidthNum / 1.2;
+
+                var closed_width = (100 - viewportWidthNum) / (count - 1);
+
+                //closed_width = closed_width / 1.2;
+                viewportWidthNum = viewportWidthNum / 1.2;
+                closed_width = closed_width / 1.2;
 
                 var stripListCss = { margin: '0', padding: '0', 'listStyleType': 'none' };
 
@@ -50,23 +56,23 @@
                 var action = function () {
                     var current_index = $(this).index();
                     var current_item = $(this);
-                    
+
                     if (current_index == active_index)
-                      return;
+                        return;
 
                     $lists.each(function (i) {
                         if (i != current_index) {
                             $(this).stop().animate({ 'width': closed_width + '%' }, {
                                 duration: settings.speed
-                            }, 'easeOutQuint');
+                            });
                         }
                     });
-                    current_item.stop().animate({ 'width': settings.viewportWidth }, {
+                    current_item.stop().animate({ 'width': viewportWidthNum + '%' }, {
                         duration: settings.speed
-                    }, 'easeOutQuint');
+                    });
 
                     active_index = current_index;
-                    
+
                     return false;
                 };
 
@@ -81,17 +87,17 @@
                     .wrap($wrap)
                     .css(containerCss);
 
+                $container.css({ width: '120%' });
                 function checkAnimation() {
-                  setInterval(function() {
-                  	if( $lists.is(":animated") ) {
-                      $container.stop().animate({width: '104%'}, 400);
-                  	} else {
-                      $container.stop().animate({width: '100%'}, 400);
-                    }
-                  }, 200);
+                    setInterval(function () {
+                        if ($lists.is(":animated")) {
+                            $container.stop().animate({ width: '130%' }, settings.speed);
+                        } else {
+                            $container.stop().animate({ width: '120%' }, settings.speed);
+                        }
+                    }, 200);
                 }
                 checkAnimation();
-
 
                 // Image formatting
                 $images.css({ 'border': 0 });
@@ -103,13 +109,13 @@
 
                 $first_list_item
                     .css({
-                        'width': settings.viewportWidth
+                        'width': viewportWidthNum + '%'
                     });
             }).trigger('slider.sizing');
 
-            $(window).bind('resize', function() {
+            $(window).bind('resize', function () {
                 var newWidth = settings.onWindowResize($(this).width());
-            });            
+            });
         });
     };
 })(jQuery);
