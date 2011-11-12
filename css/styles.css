@@ -53,15 +53,6 @@
 /* ! Layout for mobile version   */
 /* ============================= */
 
-@media handheld, only screen and (max-width: 767px) {
-
-	body {
-		
-	}
-	
-	#fluid-demo, #demo1, #demo2 { height: 200px; }
-
-}
 
 
 /* ========================================== */
