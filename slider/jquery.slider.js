@@ -95,7 +95,7 @@
                         } else {
                             $container.stop().animate({ width: '120%' }, settings.speed);
                         }
-                    }, 200);
+                    }, 20);
                 }
                 checkAnimation();
 
