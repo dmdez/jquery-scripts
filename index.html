@@ -12,12 +12,12 @@
     
     <div class="container">
         <div class="row">
-            <div class="fourcol left-col">
+            <div class="fourcol left-col header">
                 <h1>Window Blinds</h1>
     
                 <p>Fluid horizontal slideshow blind effect using jQuery</p>
                 
-				<div class="options">
+				<div class="options clearfix">
 					<h2>Options</h2>
 					<dl>
 						<dt>speed</dt>
@@ -32,12 +32,17 @@
 
 						<dt>viewportWidth</dt>
 						<dd>
-							Percentage (70%)
+							Decimal (.7)
+						</dd>
+						
+						<dt>horizontal</dt>
+						<dd>
+							Boolean (true)
 						</dd>
 					</dl>
 				</div>
             </div>
-            <div class="eightcol last">    
+            <div class="eightcol last main-content">    
 
                 <ul id="demo2" class="slider">
                     <li><a href="http://www.google.com"><img src="slider/images/Chrysanthemum.jpg" alt="" /></a></li>
@@ -52,14 +57,14 @@
                 <pre id="Pre1" class="code">
 $(document).ready(function () {
     $('#demo2').slider({
-        viewportWidth: '65%',
-        onWindowResize: function(width) {
+        viewportWidth: .65,
+		onWindowResize: function(width) {
             if ( width < 400 ) {
-                return 70;
+                return .7;
             } else if ( width < 800 ) {
-                return 90;
+                return .9;
             }
-			return 65;
+			return .65;
         }
     });
 });
@@ -79,7 +84,7 @@ $(document).ready(function () {
                         <pre id="fluid-demo-code" class="code">
 $(document).ready(function () {
     $('#fluid-demo').slider({
-        viewportWidth: "60%"
+        viewportWidth: .6
     });
 });
                         </pre>
@@ -97,7 +102,7 @@ $(document).ready(function () {
                         <pre id="demo1-code" class="code">
 $(document).ready(function () {
     $('#demo1').slider({
-        viewportWidth: '60%',
+        viewportWidth: .68,
         startIndex: 3
     });
 });

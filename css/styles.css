@@ -2,6 +2,18 @@
 /* ! Layout for desktop version   */
 /* ============================== */
 
+	.clearfix:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+	}	 
+	.clearfix { display: inline-block; }	 
+	html[xmlns] .clearfix { display: block; }	 
+	* html .clearfix { height: 1%; }
+
 	body {
 		font-family: Tahoma, Sans-Serif;
 		line-height: 1.4em;
@@ -45,7 +57,7 @@
     #demo1 .item6 { background: #eee; }
 
     /* Demo 2 */
-    #demo2 { height: 320px; }
+    #demo2 { height: 320px; overflow: hidden; }
     #demo2 li a { color: #000; font-size: 2em;}
     #demo2 li img { width: 740px; max-width: 740px; }
 

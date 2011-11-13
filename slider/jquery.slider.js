@@ -5,25 +5,45 @@
         var settings = {
             'speed': 400,
             'startIndex': 0,
-            'viewportWidth': '70%',
+            'viewportSize': .7,
+			'horizontal': true,
             'onWindowResize': function () { }
         };
 		
-		var makePercentage = function(num) {
-			if (num.toString().indexOf("%") == -1)
-				num += "%";
-			return num;
+		var createMatrix = function(n, n1, n2) {
+			var matrix = [];
+			for ( var i=0; i < n; i++ ) {
+				matrix[i] = [];
+				var iii = 0;
+				for ( var ii=0; ii < n; ii++ ) {
+					matrix[i][ii] = iii;
+					iii += i == ii ? (n1) : n2;
+				}
+			}
+			return matrix;
 		};
-		
-        // if user defined options exists, extend settings
+
         if (options)
             $.extend(settings, options);
 
         return this.each(function (i, el) {
 			
-			var $wrap = $('<div class="slider-wrap" />');
-			$(el).css({ 'overflow': 'hidden', 'position' : 'relative' }).wrap($wrap);			
-			$(el).find('li').css({ 'position' : 'absolute', 'overflow': 'hidden', 'top': 0, 'left': 0 });
+			$(el).css({ 
+				'overflow': 'hidden', 
+				'position' : 'relative',
+				'listStyleType': 'none',
+				'margin': 0,
+				'padding': 0
+			});			
+			$(el).find('li').css({ 
+				'position' : 'absolute', 
+				'overflow': 'hidden', 
+				'top': 0, 
+				'left': 0 ,
+				'listStyleType': 'none',
+				'margin': 0,
+				'padding': 0
+			});
 			
             $(el).bind('slider.sizing', function () {
                 
@@ -31,50 +51,47 @@
 					// elements
                     $container = $(this),
                     $lists = $container.find('li'),
-                    viewportWidth = makePercentage(settings.viewportWidth),
-					viewportWidthNum = parseFloat(settings.viewportWidth.replace('%','')),
+                    viewportSize = settings.viewportSize,
+					viewportSizeNum = viewportSize * 100,
 				
 					// internal variables
 					count = $lists.size(),
-					matrix = [],
-                    actionEvent = ('ontouchstart' in window) ? "click" : "mouseover";
+					actionEvent = ('ontouchstart' in window) ? "click" : "mouseover",
+					activeIndex = settings.startIndex;					
 
-				var closedWidth = (100 - viewportWidth.replace('%', '')) / (count - 1);
-				var viewportAddition = viewportWidthNum - closedWidth;				
-				$lists.css({ 'width': viewportWidth });
+				var closedSize = (100 - viewportSizeNum) / (count - 1);
+				var viewportAddition = viewportSizeNum - closedSize;				
+				var matrix = createMatrix(count, viewportSizeNum, closedSize);				
 				
-				for ( var i=0; i < count; i++ ) {
-					matrix[i] = [];
-					var iii = 0;
-					for ( var ii=0; ii < count; ii++ ) {
-						matrix[i][ii] = iii;
-						iii += i == ii ? (viewportWidthNum) : closedWidth;
-					}
-				}
+				$lists.css({ 'width': (settings.horizontal ? viewportSizeNum : "100") + '%' });				
 				
 				var setPosition = function(elem, idx) {
 					var siblings = elem.siblings();
 					var thisIndex = idx == undefined ? elem.index() : idx;
 					$lists.each(function(i) {
-						$(this).stop().animate({
-							left: matrix[thisIndex][i] + '%'
-						}, '200');
+						if ( settings.horizontal )
+							$(this).stop().animate({ left: matrix[thisIndex][i] + '%' }, settings.speed);
+						else
+							$(this).stop().animate({ top: matrix[thisIndex][i] + '%' }, settings.speed);
 					});
+					activeIndex = thisIndex;
 				};
 				
 				$lists.each(function() {
-					setPosition($(this), settings.startIndex);
-				}).unbind('mouseover').bind('mouseover', function() {
-					setPosition($(this));
+					setPosition($(this), activeIndex);
+				}).unbind(actionEvent).bind(actionEvent, function() {
+					var allowEvent = $(this).index() == activeIndex;
+					setPosition($(this));					
+					return allowEvent;
 				});
 				
 				
             }).trigger('slider.sizing');
 
             $(window).bind('resize', function () {
-                var newWidth = settings.onWindowResize($(this).width());
-				if ( newWidth ) {
-					settings.viewportWidth = newWidth.toString();
+                var newSize = settings.onWindowResize($(this).width());
+				if ( newSize ) {
+					settings.viewportSize = newSize;
 					$(el).trigger('slider.sizing');
 				}
             });
