@@ -5,7 +5,18 @@
 	};
 	
     $.fn.slider = function (options) {
-
+		
+		if ( typeof options == "string" ) {
+			switch(options) {
+				case "goto":
+					if ( arguments[1]) {
+						alert(arguments[1]);
+					}
+					break;
+			}
+			return;
+		}
+		
         var settings = {
             'speed': 400,
             'startIndex': 0,
@@ -13,7 +24,7 @@
 			'easing': 'customSlideIn'
         };
 		
-		var createMatrix = function(n, n1, n2) {
+		var createSizingMatrix = function(n, n1, n2) {
 			var matrix = [];
 			for ( var i=0; i < n; i++ ) {
 				matrix[i] = [];
@@ -25,20 +36,25 @@
 			}
 			return matrix;
 		};
-
+		
+		var calculateWidthPercentage = function(container, lists) {
+			return Math.round((lists.width() / container.width()) * 100);
+		}
+		
         if (options)
             $.extend(settings, options);
 
         return this.each(function (i, el) {
-			
-			$(el).css({ 
+			var _el = $(el);
+			var _elLists = _el.find('li');
+			_el.css({ 
 				'overflow': 'hidden', 
 				'position' : 'relative',
 				'listStyleType': 'none',
 				'margin': 0,
 				'padding': 0
 			});			
-			$(el).find('li').css({ 
+			_elLists.css({ 
 				'position' : 'absolute', 
 				'overflow': 'hidden', 
 				'top': 0, 
@@ -48,7 +64,7 @@
 				'padding': 0
 			});
 			
-            $(el).bind('slider.sizing', function () {
+            _el.bind('slider.sizing', function () {
                 
 				var 
 					// elements
@@ -63,11 +79,12 @@
 				// reset the width for resizing adjustments
 				$lists.css('width', '');
 				
-				var viewportSizeNum = Math.round(($lists.width() / $container.width()) * 100);					
+				var viewportSizeNum = calculateWidthPercentage($container, $lists);
 				var closedSize = (100 - viewportSizeNum) / (count - 1);
 				var viewportAddition = viewportSizeNum - closedSize;				
-				var matrix = createMatrix(count, viewportSizeNum, closedSize);				
+				var matrix = createSizingMatrix(count, viewportSizeNum, closedSize);				
 				
+				$container.data('viewportSizeNum', viewportSizeNum);
 				$lists.css({ 'width': (settings.horizontal ? viewportSizeNum : "100") + '%' });				
 				
 				var setPosition = function(elem, idx) {
@@ -88,13 +105,12 @@
 					var allowEvent = $(this).index() == activeIndex;
 					setPosition($(this));					
 					return allowEvent;
-				});
-				
+				});				
 				
             }).trigger('slider.sizing');
 
             $(window).bind('resize', function () {
-                $(el).trigger('slider.sizing');
+				_el.trigger('slider.sizing');
             });
         });
     };

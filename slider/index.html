@@ -4,22 +4,24 @@
 <head>
     <title></title>
     <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
     <script src="jquery.slider.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#slider-demo').slider({
-                viewportWidth: 400,
-                marginX: 1
-            });
+            $('#slider-demo').slider();
+			setTimeout(function() {
+				$('#slider-demo').slider('goto', 4);
+			}, 2000);
         });
     </script>
     <style>
-        #slider-demo { width: 550px; height: 300px; overflow: hidden; }
+        #slider-demo { height: 300px; overflow: hidden; max-width: 1000px; margin: 0 auto !important; }
         .slider, .slider li { margin: 0; padding: 0; list-style-type: none; }
-        .slider li { }
-        .slider li img { width: 400px; }        
+        .slider li { width: 85%; }
+        .slider li img { width: 400px; }
+		@media only screen and (max-width: 600px) {
+			.slider li { width: 60%; }
+		}
     </style>
 </head>
 <body>
