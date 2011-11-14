@@ -1,92 +1,101 @@
 ﻿(function ($) {
+
+	$.easing.customSlideIn = function (x, t, b, c, d) {
+		return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
+	};
+	
     $.fn.slider = function (options) {
 
         var settings = {
             'speed': 400,
-            'align': 'left',
-            'marginX': 0,
-            'startIndex': 0
+            'startIndex': 0,
+            'horizontal': true,
+			'easing': 'customSlideIn'
         };
+		
+		var createMatrix = function(n, n1, n2) {
+			var matrix = [];
+			for ( var i=0; i < n; i++ ) {
+				matrix[i] = [];
+				var iii = 0;
+				for ( var ii=0; ii < n; ii++ ) {
+					matrix[i][ii] = iii;
+					iii += i == ii ? (n1) : n2;
+				}
+			}
+			return matrix;
+		};
 
-        // if user defined options exists, extend settings
         if (options)
             $.extend(settings, options);
 
         return this.each(function (i, el) {
+			
+			$(el).css({ 
+				'overflow': 'hidden', 
+				'position' : 'relative',
+				'listStyleType': 'none',
+				'margin': 0,
+				'padding': 0
+			});			
+			$(el).find('li').css({ 
+				'position' : 'absolute', 
+				'overflow': 'hidden', 
+				'top': 0, 
+				'left': 0 ,
+				'listStyleType': 'none',
+				'margin': 0,
+				'padding': 0
+			});
+			
+            $(el).bind('slider.sizing', function () {
+                
+				var 
+					// elements
+                    $container = $(this),
+                    $lists = $container.find('li'),
+                    
+					// internal variables
+					count = $lists.size(),
+					actionEvent = ('ontouchstart' in window) ? "click" : "mouseover",
+					activeIndex = settings.startIndex;					
+				
+				// reset the width for resizing adjustments
+				$lists.css('width', '');
+				
+				var viewportSizeNum = Math.round(($lists.width() / $container.width()) * 100);					
+				var closedSize = (100 - viewportSizeNum) / (count - 1);
+				var viewportAddition = viewportSizeNum - closedSize;				
+				var matrix = createMatrix(count, viewportSizeNum, closedSize);				
+				
+				$lists.css({ 'width': (settings.horizontal ? viewportSizeNum : "100") + '%' });				
+				
+				var setPosition = function(elem, idx) {
+					var siblings = elem.siblings();
+					var thisIndex = idx == undefined ? elem.index() : idx;
+					$lists.each(function(i) {
+						if ( settings.horizontal )
+							$(this).stop().animate({ left: matrix[thisIndex][i] + '%' }, settings.speed, settings.easing);
+						else
+							$(this).stop().animate({ top: matrix[thisIndex][i] + '%' }, settings.speed, settings.easing);
+					});
+					activeIndex = thisIndex;
+				};
+				
+				$lists.each(function() {
+					setPosition($(this), activeIndex);
+				}).unbind(actionEvent).bind(actionEvent, function() {
+					var allowEvent = $(this).index() == activeIndex;
+					setPosition($(this));					
+					return allowEvent;
+				});
+				
+				
+            }).trigger('slider.sizing');
 
-            var 
-            // elements
-                $container = $(this),
-                $wrap = $('<div class="slider-wrap" />'),
-                $lists = $container.find('li'),
-                $images = $lists.find('img'),
-                $first_list_item = $($lists[settings.startIndex]),
-
-            // internal variables
-                width = $container.width(),
-                height = $container.height(),
-                count = $lists.size(),
-                total_margin_x = settings.marginX * count,
-                closed_width = Math.round((width - settings.viewportWidth - total_margin_x) / (count - 1)),
-                overflow_list_width = 2000,
-                active_index = settings.startIndex;
-
-            var listProperties = {
-                'float': 'left',
-                'overflow': 'hidden',
-                'width': closed_width,
-                'marginRight': settings.marginX
-            };
-
-            var action = function () {
-                var current_index = $(this).index();
-
-                $(this)
-                    .stop()
-                    .animate({
-                        'width': settings.viewportWidth
-                    }, settings.speed, 'easeOutQuint');
-
-                $lists.each(function (i) {
-                    if (i != current_index) {
-                        $(this)
-                        .stop()
-                        .animate({
-                            'width': closed_width
-                        }, settings.speed, 'easeOutQuint');
-                    }
-                });
-
-                active_index = current_index;
-            };
-
-            // create wrapper
-            $wrap
-                .width(width)
-                .height(height)
-                .css({ 'overflow': 'hidden' });
-
-            // container formatting and add wrapper
-            $container
-                .width(overflow_list_width)
-                .wrap($wrap);
-
-            // Image formatting
-            $images
-                .width(settings.viewportWidth)
-                .css({ 'float': settings.align, 'border': 0 });
-
-            // list formatting and event handling
-            $lists
-                .css(listProperties)
-                .height(height)
-                .bind('mouseover', action)
-                .bind('click', action);
-
-            $first_list_item
-                .css({
-                    'width': settings.viewportWidth
-                });
+            $(window).bind('resize', function () {
+                $(el).trigger('slider.sizing');
+            });
         });
     };
 })(jQuery);
