@@ -56,17 +56,7 @@
                 </ul>
                 <pre id="Pre1" class="code">
 $(document).ready(function () {
-    $('#demo2').slider({
-        viewportWidth: .65,
-		onWindowResize: function(width) {
-            if ( width < 400 ) {
-                return .7;
-            } else if ( width < 800 ) {
-                return .9;
-            }
-			return .65;
-        }
-    });
+    $('#demo2').slider();
 });
                 </pre>
 
@@ -83,9 +73,7 @@ $(document).ready(function () {
                         </ul>
                         <pre id="fluid-demo-code" class="code">
 $(document).ready(function () {
-    $('#fluid-demo').slider({
-        viewportWidth: .6
-    });
+    $('#fluid-demo').slider();
 });
                         </pre>
                     </div>
@@ -102,7 +90,6 @@ $(document).ready(function () {
                         <pre id="demo1-code" class="code">
 $(document).ready(function () {
     $('#demo1').slider({
-        viewportWidth: .68,
         startIndex: 3
     });
 });
@@ -116,7 +103,6 @@ $(document).ready(function () {
     </div>
 
     <script src="lib/jquery-1.5.1.min.js"></script>
-    <script src="lib/jquery.easing.1.3.js"></script>
     <script src="slider/jquery.slider.js"></script>
     <script type="text/javascript">
         $('.code').each(function () {

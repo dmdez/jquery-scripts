@@ -1,13 +1,16 @@
 (function ($) {
 
+	$.easing.customSlideIn = function (x, t, b, c, d) {
+		return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
+	};
+	
     $.fn.slider = function (options) {
 
         var settings = {
             'speed': 400,
             'startIndex': 0,
-            'viewportSize': .7,
-			'horizontal': true,
-            'onWindowResize': function () { }
+            'horizontal': true,
+			'easing': 'customSlideIn'
         };
 		
 		var createMatrix = function(n, n1, n2) {
@@ -51,14 +54,16 @@
 					// elements
                     $container = $(this),
                     $lists = $container.find('li'),
-                    viewportSize = settings.viewportSize,
-					viewportSizeNum = viewportSize * 100,
-				
+                    
 					// internal variables
 					count = $lists.size(),
 					actionEvent = ('ontouchstart' in window) ? "click" : "mouseover",
 					activeIndex = settings.startIndex;					
-
+				
+				// reset the width for resizing adjustments
+				$lists.css('width', '');
+				
+				var viewportSizeNum = Math.round(($lists.width() / $container.width()) * 100);					
 				var closedSize = (100 - viewportSizeNum) / (count - 1);
 				var viewportAddition = viewportSizeNum - closedSize;				
 				var matrix = createMatrix(count, viewportSizeNum, closedSize);				
@@ -70,9 +75,9 @@
 					var thisIndex = idx == undefined ? elem.index() : idx;
 					$lists.each(function(i) {
 						if ( settings.horizontal )
-							$(this).stop().animate({ left: matrix[thisIndex][i] + '%' }, settings.speed);
+							$(this).stop().animate({ left: matrix[thisIndex][i] + '%' }, settings.speed, settings.easing);
 						else
-							$(this).stop().animate({ top: matrix[thisIndex][i] + '%' }, settings.speed);
+							$(this).stop().animate({ top: matrix[thisIndex][i] + '%' }, settings.speed, settings.easing);
 					});
 					activeIndex = thisIndex;
 				};
@@ -89,11 +94,7 @@
             }).trigger('slider.sizing');
 
             $(window).bind('resize', function () {
-                var newSize = settings.onWindowResize($(this).width());
-				if ( newSize ) {
-					settings.viewportSize = newSize;
-					$(el).trigger('slider.sizing');
-				}
+                $(el).trigger('slider.sizing');
             });
         });
     };
