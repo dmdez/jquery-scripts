@@ -16,14 +16,14 @@
         var slider = this;
         slider.settings = $.extend({}, defaults, options);
         
-		var $element = $(element), element = element;
+		var $element = $(element);
 		var $elementLi = $('li', $element);
 		var childrenCount = $elementLi.size();
 		var viewportSizeNum = calculateWidthPercentage($element, $elementLi);
 		var matrix = [];
 		var closedSize = 0;
 		var activeIndex = slider.settings.startIndex;
-		var actionEvent = ('ontouchstart' in window) ? "touchstart touchend" : "mouseover";
+		var actionEvent = ('ontouchstart' in window) ? "click" : "mouseover";
 		
 		$.extend(slider, {
 			init: function() {            
@@ -56,7 +56,7 @@
 				});
 			},
 			
-			goto: function(idx) {
+			goToFrame: function(idx) {
 				$($elementLi[idx]).trigger('mouseover');
 			}
 		});
@@ -93,7 +93,10 @@
 		}
 		
 		function calculateWidthPercentage(container, lists) {
-			return Math.round((lists.width() / container.width()) * 100);
+			if ( slider.settings.horizontal ) {
+					return Math.round((lists.width() / container.width()) * 100);
+			}
+			return Math.round((lists.height() / container.height()) * 100);			
 		}
 		
         slider.init();
@@ -112,7 +115,10 @@
 		if ( typeof options == 'string') {
 			var instance = $(this).data('slider');
 			var args = Array.prototype.slice.call(arguments, 1);
-			return instance[options].apply(instance, args);
+			if ( instance[options] ) {
+				return instance[options].apply(instance, args);
+			}
+			return;
 		} else {
 			return this.each(function() {
 				if (undefined == $(this).data('slider')) {
