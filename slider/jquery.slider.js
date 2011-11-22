@@ -8,9 +8,12 @@
 
         var defaults = {
             'speed': 400,
-            'startIndex': 0,
+            'startIndex': undefined,
             'horizontal': true,
-			'easing': 'customSlideIn'
+			'easing': 'customSlideIn',
+			'eventType': 'mouseover',
+			'onAfterOpen': function() {},
+			'onBeforeOpen': function() {}
         }
 
         var slider = this;
@@ -20,10 +23,11 @@
 		var $elementLi = $('li', $element);
 		var childrenCount = $elementLi.size();
 		var viewportSizeNum = calculateWidthPercentage($element, $elementLi);
+		var defaultClosedSize = Math.round(100 / childrenCount);
 		var matrix = [];
 		var closedSize = 0;
 		var activeIndex = slider.settings.startIndex;
-		var actionEvent = ('ontouchstart' in window) ? "click" : "mouseover";
+		var actionEvent = ('ontouchstart' in window) ? "click" : slider.settings.eventType;
 		
 		$.extend(slider, {
 			init: function() {            
@@ -49,38 +53,65 @@
 				$elementLi.each(function() {
 					setPosition($(this), activeIndex);
 				}).bind(actionEvent, function(e) {
+					var itemIndex = $(this).index();
+					if ( itemIndex == activeIndex )
+						return true;
 					e.preventDefault();
-					var allowEvent = $(this).index() == activeIndex;
-					setPosition($(this));
-					return allowEvent;
+					setPosition($(this), itemIndex);
+					return false;
 				});
 			},
 			
 			goToFrame: function(idx) {
 				$($elementLi[idx]).trigger('mouseover');
+			},
+			
+			reset: function() {
+				$elementLi.each(function() {
+					setPosition($(this), slider.settings.startIndex);
+				});
 			}
 		});
         
 		function setPosition(elem, idx) {
 			var siblings = elem.siblings();
-			var thisIndex = idx == undefined ? elem.index() : idx;
-			$elementLi.each(function(i) {
-				if ( slider.settings.horizontal )
-					$(this).stop().animate({ left: matrix[thisIndex][i] + '%' }, slider.settings.speed, slider.settings.easing);
-				else
-					$(this).stop().animate({ top: matrix[thisIndex][i] + '%' }, slider.settings.speed, slider.settings.easing);
+			var useDefault = false;
+			if ( idx == undefined )
+				useDefault = true;
+				
+			$elementLi.removeClass('slide-open').each(function(i) {
+				var animateSize = (useDefault ? (defaultClosedSize * i) : matrix[idx][i]) + '%';
+				var animateConfig = { left: animateSize }
+				
+				if ( !slider.settings.horizontal ) {
+					animateConfig.left = undefined;
+					animateConfig.top = animateSize;
+				}
+				
+				if ( idx == $(this).index() ) 
+					slider.settings.onBeforeOpen(this);
+				
+				$(this)
+					.stop()
+					.animate(animateConfig, slider.settings.speed, slider.settings.easing, function() {
+						if ( idx == $(this).index() ) {
+							$(this).addClass('slide-open');
+							slider.settings.onAfterOpen(this);
+						}
+					});
 			});
-			activeIndex = thisIndex;
+			activeIndex = idx;
 		}
 		
 		function setSize() {
 			closedSize = (100 - viewportSizeNum) / (childrenCount - 1);
-			matrix = buildSizingMatrix(childrenCount, viewportSizeNum, closedSize);			
+			matrix = buildSizingMatrix(childrenCount, viewportSizeNum, closedSize);
 			$element.data('viewportSizeNum', viewportSizeNum);			
 		}
 				
 		function buildSizingMatrix(n, n1, n2) {
 			var matrix = [];
+			var defaultSize = Math.round(100 / n);
 			for ( var i=0; i < n; i++ ) {
 				matrix[i] = [];
 				var iii = 0;
@@ -88,7 +119,7 @@
 					matrix[i][ii] = iii;
 					iii += i == ii ? (n1) : n2;
 				}
-			}
+			}			
 			return matrix;
 		}
 		

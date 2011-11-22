@@ -9,10 +9,15 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#slider-demo').slider();
-			$('#slider-demo-vert').slider({ horizontal: false});
+			$('#slider-demo-vert').slider({ horizontal: false, eventType: 'click'});
 			setTimeout(function() {
 				$('#slider-demo').slider('goToFrame', 4);
+				$('#slider-demo-vert').slider('reset', 4);
 			}, 2000);
+			$('.reset').click(function() {
+				$('#slider-demo').slider('reset');
+				return false;
+			});
         });
     </script>
     <style>
@@ -20,6 +25,13 @@
         .slider li img { width: 100%; }
 		#slider-demo { height: 300px; overflow: hidden; max-width: 1000px; margin: 0 auto !important; }
         #slider-demo li { width: 65%; }
+		#slider-demo li .contents { display: none; }
+		#slider-demo li.slide-open .contents {
+			position: absolute;
+			display: block;
+			top: 0;
+			left: 0;
+		}
         #slider-demo-vert {
 			height: 500px;
 			overflow: hidden;
@@ -32,13 +44,14 @@
     </style>
 </head>
 <body>
+	<a href="#" class="reset">Reset</a>
     <ul id="slider-demo" class="slider">
-        <li><a href="http://www.google.com/1"><img src="https://lh4.googleusercontent.com/-ei9m1LX-ZYg/TYn7Fv4gHmI/AAAAAAAABbM/YBfGIdFGIsI/s640/January08%252520030.jpg" /></a></li>
-        <li><a href="http://www.google.com/2"><img src="https://lh3.googleusercontent.com/-6Dx4cwjo_RY/TYn7LzyeCuI/AAAAAAAABbQ/MR99Pp8hJnY/s800/Picture%252520796.jpg" /></a></li>
-        <li><a href="http://www.google.com/3"><img src="https://lh3.googleusercontent.com/-mUINKkxp0dM/TYn7Y_tiVTI/AAAAAAAABbU/ZaS-kVYAO8c/s800/100_2050.jpg" /></a></li>
-        <li><a href="http://www.google.com/4"><img src="https://lh5.googleusercontent.com/--jK3HNy-iuI/TYn7fUDSRWI/AAAAAAAABbY/zu8J8BOA1RM/s800/2009%252520029.jpg" /></a></li>
-        <li><a href="http://www.google.com/5"><img src="https://lh5.googleusercontent.com/-kduSLLNl49Q/TYn-kP9v8II/AAAAAAAABbc/hExLswwbt-M/lucas-toby.jpg" /></a></li>
-        <li><a href="http://www.google.com/6"><img src="https://lh6.googleusercontent.com/-tFwklP49YvA/TYn-kPx0gVI/AAAAAAAABbg/AkHjpEMN5Zg/s640/lucas-me.jpg" /></a></li>
+        <li><span class="contents">abc</span><a href="http://www.google.com/1"><img src="https://lh4.googleusercontent.com/-ei9m1LX-ZYg/TYn7Fv4gHmI/AAAAAAAABbM/YBfGIdFGIsI/s640/January08%252520030.jpg" /></a></li>
+        <li><span class="contents">abc</span><a href="http://www.google.com/2"><img src="https://lh3.googleusercontent.com/-6Dx4cwjo_RY/TYn7LzyeCuI/AAAAAAAABbQ/MR99Pp8hJnY/s800/Picture%252520796.jpg" /></a></li>
+        <li><span class="contents">abc</span><a href="http://www.google.com/3"><img src="https://lh3.googleusercontent.com/-mUINKkxp0dM/TYn7Y_tiVTI/AAAAAAAABbU/ZaS-kVYAO8c/s800/100_2050.jpg" /></a></li>
+        <li><span class="contents">abc</span><a href="http://www.google.com/4"><img src="https://lh5.googleusercontent.com/--jK3HNy-iuI/TYn7fUDSRWI/AAAAAAAABbY/zu8J8BOA1RM/s800/2009%252520029.jpg" /></a></li>
+        <li><span class="contents">abc</span><a href="http://www.google.com/5"><img src="https://lh5.googleusercontent.com/-kduSLLNl49Q/TYn-kP9v8II/AAAAAAAABbc/hExLswwbt-M/lucas-toby.jpg" /></a></li>
+        <li><span class="contents">abc</span><a href="http://www.google.com/6"><img src="https://lh6.googleusercontent.com/-tFwklP49YvA/TYn-kPx0gVI/AAAAAAAABbg/AkHjpEMN5Zg/s640/lucas-me.jpg" /></a></li>
     </ul>
     <ul id="slider-demo-vert" class="slider">
         <li><a href="http://www.google.com/1"><img src="https://lh4.googleusercontent.com/-ei9m1LX-ZYg/TYn7Fv4gHmI/AAAAAAAABbM/YBfGIdFGIsI/s640/January08%252520030.jpg" /></a></li>
